@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mock Exam | CX Practice Hub</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="exam-body">
+
+  <header class="navbar exam-header">
+    <div class="logo"><a href="index.html" style="text-decoration: none; color: inherit;">← Back to Home</a></div>
+    <div class="exam-title">CX Mock Examination</div>
+    <div class="timer-box">Time Left: <span id="global-timer">60:00</span></div>
+  </header>
+
+  <main class="exam-container" id="exam-main">
+    <!-- LEFT: Matrix of Questions -->
+    <aside class="matrix-panel">
+      <div class="matrix-header">
+        <h3>Question Matrix</h3>
+        <p class="matrix-sub" id="status-summary">Answered: 0 / 0</p>
+      </div>
+      <div class="matrix-grid" id="question-matrix"></div>
+      
+      <div class="matrix-footer">
+        <button id="submit-exam-btn" class="btn primary full-width">Submit Exam</button>
+      </div>
+    </aside>
+
+    <!-- RIGHT: Question & Options Display -->
+    <section class="question-panel">
+      <div class="question-header">
+        <span class="q-badge" id="current-q-label">Question 1</span>
+        <span class="q-domain" id="q-domain-label">Domain</span>
+      </div>
+
+      <div class="q-content">
+        <h3 id="question-text">Loading question...</h3>
+        <div id="options-container" class="options-list"></div>
+        <div id="explanation-box" class="explanation-box hidden"></div>
+      </div>
+
+      <div class="question-nav">
+        <button id="prev-btn" class="btn secondary">Previous</button>
+        <button id="next-btn" class="btn primary">Next</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- RESULT MODAL / OVERLAY -->
+  <div id="result-screen" class="result-modal hidden">
+    <div class="result-card">
+      <h2>Exam Completed</h2>
+      <p class="score-text" id="score-text">0 / 0 (0%)</p>
+      <p id="score-message"></p>
+      
+      <div class="result-actions">
+        <button id="review-btn" class="btn primary">Review Answers</button>
+        <button id="retake-btn" class="btn secondary">Retake Exam</button>
+        <a href="index.html" class="btn community-btn">Exit to Home</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let questions = [];
+    let currentIndex = 0;
+    let userAnswers = {}; // { index: selectedOptionIndex }
+    let isReviewMode = false;
+    let timeLeft = 60 * 60; // 60 minutes default total exam timer
+    let timerInterval = null;
+
+    async function initExam() {
+      try {
+        const res = await fetch('questions.json');
+        const rawData = await res.json();
+
+        questions = rawData.map(q => {
+          const opts = [];
+          if (q.option_0 !== undefined) opts.push(q.option_0);
+          if (q.option_1 !== undefined) opts.push(q.option_1);
+          if (q.option_2 !== undefined) opts.push(q.option_2);
+          if (q.option_3 !== undefined) opts.push(q.option_3);
+
+          let correctIdx = typeof q.answerIndex === 'number' ? q.answerIndex - 1 : 0;
+          if (correctIdx < 0) correctIdx = 0;
+
+          return {
+            id: q.id,
+            domain: q.domain || "Customer Experience",
+            question: q.question,
+            options: opts.length > 0 ? opts : (q.options || []),
+            answerIndex: correctIdx,
+            explanation: q.explanation || "No explanation provided."
+          };
+        });
+
+        // Set overall exam timer proportional to questions (e.g. 75s per question)
+        timeLeft = questions.length * 75;
+        startTimer();
+        buildMatrix();
+        loadQuestion(0);
+      } catch (err) {
+        console.error("Error loading questions", err);
+      }
+    }
+
+    function startTimer() {
+      updateTimerDisplay();
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          finishExam();
+        }
+      }, 1000);
+    }
+
+    function updateTimerDisplay() {
+      const mins = Math.floor(timeLeft / 60);
+      const secs = timeLeft % 60;
+      document.getElementById('global-timer').textContent = 
+        `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    function buildMatrix() {
+      const container = document.getElementById('question-matrix');
+      container.innerHTML = '';
+      questions.forEach((_, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'matrix-cell';
+        btn.id = `matrix-cell-${idx}`;
+        btn.textContent = idx + 1;
+        btn.onclick = () => loadQuestion(idx);
+        container.appendChild(btn);
+      });
+      updateStatusSummary();
+    }
+
+    function updateStatusSummary() {
+      const answeredCount = Object.keys(userAnswers).length;
+      document.getElementById('status-summary').textContent = 
+        isReviewMode ? `Reviewing ${questions.length} Questions` : `Answered: ${answeredCount} / ${questions.length}`;
+    }
+
+    function loadQuestion(index) {
+      currentIndex = index;
+      const q = questions[currentIndex];
+
+      document.getElementById('current-q-label').textContent = `Question ${currentIndex + 1} of ${questions.length}`;
+      document.getElementById('q-domain-label').textContent = q.domain;
+      document.getElementById('question-text').textContent = q.question;
+
+      // Update Matrix highlight
+      document.querySelectorAll('.matrix-cell').forEach((cell, idx) => {
+        cell.classList.remove('active');
+        if (idx === currentIndex) cell.classList.add('active');
+      });
+
+      // Render Options
+      const optionsContainer = document.getElementById('options-container');
+      optionsContainer.innerHTML = '';
+
+      q.options.forEach((optText, optIdx) => {
+        const optBtn = document.createElement('div');
+        optBtn.className = 'exam-option';
+
+        const radio = document.createElement('input');
+        radio.type = 'radio';
+        radio.name = `option-${currentIndex}`;
+        radio.checked = userAnswers[currentIndex] === optIdx;
+        radio.disabled = isReviewMode;
+
+        const label = document.createElement('span');
+        label.textContent = optText;
+
+        optBtn.appendChild(radio);
+        optBtn.appendChild(label);
+
+        if (!isReviewMode) {
+          optBtn.onclick = () => {
+            userAnswers[currentIndex] = optIdx;
+            radio.checked = true;
+            document.getElementById(`matrix-cell-${currentIndex}`).classList.add('answered');
+            updateStatusSummary();
+            renderOptionSelection();
+          };
+        } else {
+          // Review highlights
+          if (optIdx === q.answerIndex) optBtn.classList.add('opt-correct');
+          if (userAnswers[currentIndex] === optIdx && optIdx !== q.answerIndex) {
+            optBtn.classList.add('opt-wrong');
+          }
+        }
+
+        optionsContainer.appendChild(optBtn);
+      });
+
+      renderOptionSelection();
+
+      // Explanation display in Review Mode
+      const explBox = document.getElementById('explanation-box');
+      if (isReviewMode) {
+        explBox.classList.remove('hidden');
+        explBox.innerHTML = `<strong>Explanation:</strong> ${q.explanation}`;
+      } else {
+        explBox.classList.add('hidden');
+      }
+
+      // Prev/Next buttons
+      document.getElementById('prev-btn').disabled = currentIndex === 0;
+      document.getElementById('next-btn').disabled = currentIndex === questions.length - 1;
+    }
+
+    function renderOptionSelection() {
+      const opts = document.querySelectorAll('.exam-option');
+      opts.forEach((opt, idx) => {
+        if (!isReviewMode) {
+          if (userAnswers[currentIndex] === idx) {
+            opt.classList.add('selected');
+          } else {
+            opt.classList.remove('selected');
+          }
+        }
+      });
+    }
+
+    document.getElementById('prev-btn').onclick = () => {
+      if (currentIndex > 0) loadQuestion(currentIndex - 1);
+    };
+
+    document.getElementById('next-btn').onclick = () => {
+      if (currentIndex < questions.length - 1) loadQuestion(currentIndex + 1);
+    };
+
+    document.getElementById('submit-exam-btn').onclick = () => {
+      const unanswered = questions.length - Object.keys(userAnswers).length;
+      if (unanswered > 0) {
+        if (!confirm(`You have ${unanswered} unanswered question(s). Are you sure you want to finish and submit?`)) {
+          return;
+        }
+      }
+      finishExam();
+    };
+
+    function finishExam() {
+      clearInterval(timerInterval);
+      let score = 0;
+      questions.forEach((q, idx) => {
+        if (userAnswers[idx] === q.answerIndex) {
+          score++;
+        }
+      });
+
+      const pct = Math.round((score / questions.length) * 100);
+      document.getElementById('score-text').textContent = `${score} / ${questions.length} (${pct}%)`;
+      document.getElementById('score-message').textContent = pct >= 75 ? "Congratulations! Passing standard achieved." : "Keep practicing to reinforce weak domains.";
+
+      document.getElementById('result-screen').classList.remove('hidden');
+    }
+
+    document.getElementById('review-btn').onclick = () => {
+      isReviewMode = true;
+      document.getElementById('result-screen').classList.add('hidden');
+      document.getElementById('submit-exam-btn').classList.add('hidden');
+
+      // Color matrix cells based on correct vs incorrect
+      questions.forEach((q, idx) => {
+        const cell = document.getElementById(`matrix-cell-${idx}`);
+        cell.classList.remove('answered');
+        if (userAnswers[idx] === q.answerIndex) {
+          cell.classList.add('matrix-correct');
+        } else {
+          cell.classList.add('matrix-wrong');
+        }
+      });
+
+      updateStatusSummary();
+      loadQuestion(0);
+    };
+
+    document.getElementById('retake-btn').onclick = () => {
+      location.reload();
+    };
+
+    initExam();
+  </script>
+</body>
+</html>
