@@ -7,48 +7,26 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Navigation Header -->
   <header class="navbar">
     <div class="logo">CX Practice Hub</div>
     <nav>
-      <a href="#zone-exam">Zone A: Mock Exam</a>
+      <a href="exam.html">Zone A: Mock Exam</a>
       <a href="#zone-cases">Zone B: Case Studies</a>
       <a href="#zone-community">Zone C: Community</a>
     </nav>
   </header>
 
   <main class="container">
-    <!-- ZONE A: MOCK EXAM -->
-    <section id="zone-exam" class="section-card">
-      <h2>Zone A: CX Knowledge Assessment</h2>
-      
-      <!-- Start Screen -->
-      <div id="start-screen">
-        <p>Test your knowledge with scenario-based CX questions. Each question is timed.</p>
-        <button id="start-btn" class="btn primary">Start Mock Exam</button>
-      </div>
-
-      <!-- Quiz Screen -->
-      <div id="quiz-screen" class="hidden">
-        <div class="quiz-header">
-          <span id="question-progress">Question 1</span>
-          <div class="timer">Time Remaining: <span id="timer-count">60</span>s</div>
-        </div>
-        <h3 id="question-text">Loading question...</h3>
-        <div id="options-container" class="options-grid"></div>
-        <button id="next-btn" class="btn secondary hidden">Next Question</button>
-      </div>
-
-      <!-- Result Screen -->
-      <div id="result-screen" class="hidden">
-        <h3>Exam Summary</h3>
-        <p id="score-display"></p>
-        <div id="review-container"></div>
-        <button id="restart-btn" class="btn primary">Retake Exam</button>
+    <!-- ZONE A CARD -->
+    <section class="section-card">
+      <h2>Zone A: CX Knowledge Assessment (Mock Exam)</h2>
+      <p>Simulate the full certification testing environment with our timed question bank, question matrix navigation, and post-exam detailed rationales.</p>
+      <div style="margin-top: 1.5rem;">
+        <a href="exam.html" class="btn primary" style="text-decoration:none; display:inline-block;">Launch Mock Exam →</a>
       </div>
     </section>
 
-    <!-- ZONE B: CASE STUDIES -->
+    <!-- ZONE B CARD -->
     <section id="zone-cases" class="section-card">
       <h2>Zone B: Practical Case Studies</h2>
       <div class="case-grid">
@@ -65,156 +43,15 @@
       </div>
     </section>
 
-    <!-- ZONE C: COMMUNITY -->
+    <!-- ZONE C CARD -->
     <section id="zone-community" class="section-card">
       <h2>Zone C: CX Community & Discussion</h2>
-      <p>Connect with other CX professionals, debate scenario solutions, and share exam insights.</p>
-      <div class="community-links">
+      <p>Connect with other CX practitioners, share exam preparation strategies, and review complex scenario questions.</p>
+      <div class="community-links" style="margin-top: 1rem;">
         <a href="https://t.me/" target="_blank" class="btn community-btn">Join Telegram Group</a>
         <a href="https://discord.gg/" target="_blank" class="btn community-btn">Join Discord Community</a>
       </div>
     </section>
   </main>
-
-  <script>
-    let questions = [];
-    let currentIndex = 0;
-    let score = 0;
-    let timer = null;
-    let timeLeft = 0;
-    let userAnswers = [];
-
-    async function loadQuestions() {
-      try {
-        const res = await fetch('questions.json');
-        const rawData = await res.json();
-
-        questions = rawData.map(q => {
-          const options = [];
-          if (q.option_0 !== undefined) options.push(q.option_0);
-          if (q.option_1 !== undefined) options.push(q.option_1);
-          if (q.option_2 !== undefined) options.push(q.option_2);
-          if (q.option_3 !== undefined) options.push(q.option_3);
-
-          let correctIdx = typeof q.answerIndex === 'number' ? q.answerIndex - 1 : 0;
-          if (correctIdx < 0) correctIdx = 0;
-
-          return {
-            id: q.id,
-            question: q.question,
-            options: options.length > 0 ? options : (q.options || []),
-            answerIndex: correctIdx,
-            timeLimitSeconds: q.timeLimitSeconds || 60,
-            explanation: q.explanation || ''
-          };
-        });
-      } catch (e) {
-        console.error("Could not load questions.json", e);
-      }
-    }
-
-    document.getElementById('start-btn').addEventListener('click', () => {
-      if (!questions.length) {
-        alert("Questions are still loading or could not be found.");
-        return;
-      }
-      document.getElementById('start-screen').classList.add('hidden');
-      document.getElementById('quiz-screen').classList.remove('hidden');
-      currentIndex = 0;
-      score = 0;
-      userAnswers = [];
-      showQuestion();
-    });
-
-    function showQuestion() {
-      clearInterval(timer);
-      const q = questions[currentIndex];
-      timeLeft = q.timeLimitSeconds;
-
-      document.getElementById('question-progress').textContent = `Question ${currentIndex + 1} of ${questions.length}`;
-      document.getElementById('timer-count').textContent = timeLeft;
-      document.getElementById('question-text').textContent = q.question;
-
-      const optContainer = document.getElementById('options-container');
-      optContainer.innerHTML = '';
-      document.getElementById('next-btn').classList.add('hidden');
-
-      q.options.forEach((opt, idx) => {
-        const btn = document.createElement('button');
-        btn.className = 'opt-btn';
-        btn.textContent = opt;
-        btn.onclick = () => selectAnswer(idx);
-        optContainer.appendChild(btn);
-      });
-
-      timer = setInterval(() => {
-        timeLeft--;
-        document.getElementById('timer-count').textContent = timeLeft;
-        if (timeLeft <= 0) {
-          clearInterval(timer);
-          selectAnswer(-1);
-        }
-      }, 1000);
-    }
-
-    function selectAnswer(selectedIndex) {
-      clearInterval(timer);
-      const q = questions[currentIndex];
-      const isCorrect = selectedIndex === q.answerIndex;
-      if (isCorrect) score++;
-
-      userAnswers.push({
-        question: q.question,
-        options: q.options,
-        selected: selectedIndex,
-        correct: q.answerIndex,
-        explanation: q.explanation
-      });
-
-      const buttons = document.querySelectorAll('.opt-btn');
-      buttons.forEach((btn, idx) => {
-        btn.disabled = true;
-        if (idx === q.answerIndex) btn.classList.add('correct');
-        if (idx === selectedIndex && !isCorrect) btn.classList.add('wrong');
-      });
-
-      const nextBtn = document.getElementById('next-btn');
-      nextBtn.classList.remove('hidden');
-      nextBtn.onclick = () => {
-        currentIndex++;
-        if (currentIndex < questions.length) {
-          showQuestion();
-        } else {
-          showResults();
-        }
-      };
-    }
-
-    function showResults() {
-      document.getElementById('quiz-screen').classList.add('hidden');
-      document.getElementById('result-screen').classList.remove('hidden');
-      document.getElementById('score-display').textContent = `You scored ${score} out of ${questions.length} (${Math.round((score / questions.length) * 100)}%)`;
-
-      const reviewContainer = document.getElementById('review-container');
-      reviewContainer.innerHTML = '<h4>Answer Explanations:</h4>';
-      userAnswers.forEach((ans, i) => {
-        const div = document.createElement('div');
-        div.className = 'review-card';
-        div.innerHTML = `
-          <p><strong>Q${i+1}: ${ans.question}</strong></p>
-          <p>Your answer: ${ans.selected >= 0 ? ans.options[ans.selected] : 'Timed Out'} | Correct: <strong>${ans.options[ans.correct]}</strong></p>
-          <p class="explanation">💡 <em>${ans.explanation}</em></p>
-        `;
-        reviewContainer.appendChild(div);
-      });
-    }
-
-    document.getElementById('restart-btn').addEventListener('click', () => {
-      document.getElementById('result-screen').classList.add('hidden');
-      document.getElementById('start-screen').classList.remove('hidden');
-    });
-
-    loadQuestions();
-  </script>
 </body>
 </html>
