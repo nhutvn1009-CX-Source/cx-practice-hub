@@ -11,6 +11,72 @@
     .row-missing { background-color: #fee2e2 !important; }
     .radio-label { display: block; width: 100%; height: 100%; cursor: pointer; text-align: center; }
     .radio-label input { width: 20px; height: 20px; cursor: pointer; accent-color: #0284c7; }
+
+    /* CRITERIA ASSESSMENT GUIDE */
+    .criteria-card {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .criteria-title {
+      font-size: 1.05rem;
+      color: #0f172a;
+      margin-bottom: 0.85rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .criteria-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0.75rem;
+    }
+    .crit-item {
+      border-radius: 6px;
+      padding: 0.85rem;
+      border-left: 4px solid;
+      background: #f8fafc;
+      font-size: 0.85rem;
+    }
+    .crit-item strong {
+      display: block;
+      color: #0f172a;
+      font-size: 0.9rem;
+      margin-bottom: 0.35rem;
+    }
+    .crit-item p {
+      color: #475569;
+      line-height: 1.35;
+      margin: 0;
+    }
+    .crit-1 { border-left-color: #94a3b8; background: #f8fafc; }
+    .crit-2 { border-left-color: #f59e0b; background: #fffbeb; }
+    .crit-3 { border-left-color: #0284c7; background: #f0f9ff; }
+    .crit-4 { border-left-color: #6366f1; background: #eef2ff; }
+    .crit-5 { border-left-color: #10b981; background: #ecfdf5; }
+
+    .q-cat {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #0284c7;
+      text-transform: uppercase;
+      margin-bottom: 0.25rem;
+    }
+    .q-statement {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #0f172a;
+      line-height: 1.4;
+    }
+    .q-eval {
+      color: #64748b;
+      margin-top: 0.25rem;
+      font-size: 0.85rem;
+    }
   </style>
 </head>
 <body class="diagnostic-body">
@@ -29,6 +95,33 @@
       <p>Evaluate your enterprise across 5 strategic dimensions using the 5-point maturity continuum. Rate each practice based on ground-truth operational reality, not aspirational intent.</p>
     </div>
 
+    <!-- RATING CRITERIA GUIDE -->
+    <div class="criteria-card" id="criteria-guide">
+      <div class="criteria-title">📌 Rating Criteria Reference Guide</div>
+      <div class="criteria-grid">
+        <div class="crit-item crit-1">
+          <strong>1 – Absent / Ad-Hoc</strong>
+          <p>No formal process; handled informally or reactively in isolated moments.</p>
+        </div>
+        <div class="crit-item crit-2">
+          <strong>2 – Developing / Siloed</strong>
+          <p>Exists in a few teams wearing blinders, with inconsistent tools and conflicting targets.</p>
+        </div>
+        <div class="crit-item crit-3">
+          <strong>3 – Coordinated / Tactical</strong>
+          <p>Standardized in core units, cross-functional conversations have begun, but systemic execution remains uneven.</p>
+        </div>
+        <div class="crit-item crit-4">
+          <strong>4 – Integrated / Strategic</strong>
+          <p>Governed enterprise-wide, tied to financial outcomes, with formalized routines across departments.</p>
+        </div>
+        <div class="crit-item crit-5">
+          <strong>5 – Ingrained / Transformational</strong>
+          <p>Embedded in daily operational DNA, continuous experimentation is standard, and teams proactively solve root causes.</p>
+        </div>
+      </div>
+    </div>
+
     <!-- ASSESSMENT FORM -->
     <form id="maturity-form">
       <div class="table-responsive">
@@ -37,11 +130,21 @@
             <tr>
               <th style="width: 40px;">#</th>
               <th>Dimension & Operational Practice</th>
-              <th class="rate-col">1<br><span class="col-sub">Absent / Ad-Hoc</span></th>
-              <th class="rate-col">2<br><span class="col-sub">Developing / Siloed</span></th>
-              <th class="rate-col">3<br><span class="col-sub">Coordinated / Tactical</span></th>
-              <th class="rate-col">4<br><span class="col-sub">Integrated / Strategic</span></th>
-              <th class="rate-col">5<br><span class="col-sub">Ingrained / Transformational</span></th>
+              <th class="rate-col" title="1 – Absent / Ad-Hoc: No formal process; handled informally or reactively in isolated moments.">
+                1<br><span class="col-sub">Absent / Ad-Hoc</span>
+              </th>
+              <th class="rate-col" title="2 – Developing / Siloed: Exists in a few teams wearing blinders, with inconsistent tools and conflicting targets.">
+                2<br><span class="col-sub">Developing / Siloed</span>
+              </th>
+              <th class="rate-col" title="3 – Coordinated / Tactical: Standardized in core units, cross-functional conversations have begun, but systemic execution remains uneven.">
+                3<br><span class="col-sub">Coordinated / Tactical</span>
+              </th>
+              <th class="rate-col" title="4 – Integrated / Strategic: Governed enterprise-wide, tied to financial outcomes, with formalized routines across departments.">
+                4<br><span class="col-sub">Integrated / Strategic</span>
+              </th>
+              <th class="rate-col" title="5 – Ingrained / Transformational: Embedded in daily operational DNA, continuous experimentation is standard, and teams proactively solve root causes.">
+                5<br><span class="col-sub">Ingrained / Transformational</span>
+              </th>
             </tr>
           </thead>
           <tbody id="questions-tbody">
@@ -322,7 +425,6 @@
       document.getElementById('stage-summary').textContent = stage.summary;
       document.getElementById('total-score-val').textContent = totalScore;
 
-      // Calculate Dimension Scores
       const dimMap = {};
       diagnosticData.dimensions.forEach(d => dimMap[d.id] = { name: d.name, score: 0, count: 0 });
       diagnosticData.questions.forEach(q => {
@@ -348,7 +450,6 @@
         dimBars.appendChild(div);
       });
 
-      // Operational Reality & Priorities
       document.getElementById('operational-reality-list').innerHTML = 
         stage.operational_reality.map(item => `<li>${item}</li>`).join('');
       document.getElementById('priorities-list').innerHTML = 
@@ -356,8 +457,9 @@
       document.getElementById('metrics-chips').innerHTML = 
         stage.relevant_lagging_metrics.map(m => `<span class="metric-chip">${m}</span>`).join('');
 
-      // Toggle views
+      // Hide survey & guide, show results
       document.getElementById('intro-box').classList.add('hidden');
+      document.getElementById('criteria-guide').classList.add('hidden');
       document.getElementById('maturity-form').classList.add('hidden');
       document.getElementById('results-panel').classList.remove('hidden');
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -367,7 +469,6 @@
       location.reload();
     };
 
-    // Render table immediately
     renderTable();
   </script>
 </body>
