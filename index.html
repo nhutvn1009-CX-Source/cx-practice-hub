@@ -1,82 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CX Practice Hub & Knowledge Hub</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <!-- Navigation Header -->
-  <header class="navbar">
-    <div class="logo">CX Practice Hub</div>
-    <nav>
-      <a href="#zone-exam">Zone A: Mock Exam</a>
-      <a href="#zone-cases">Zone B: Case Studies</a>
-      <a href="#zone-community">Zone C: Community</a>
-    </nav>
-  </header>
-
-  <main class="container">
-    <!-- ZONE A: MOCK EXAM -->
-    <section id="zone-exam" class="section-card">
-      <h2>Zone A: CX Knowledge Assessment</h2>
-      
-      <!-- Start Screen -->
-      <div id="start-screen">
-        <p>Test your knowledge with 50 scenario-based CX questions. Each question is timed.</p>
-        <button id="start-btn" class="btn primary">Start Mock Exam</button>
-      </div>
-
-      <!-- Quiz Screen -->
-      <div id="quiz-screen" class="hidden">
-        <div class="quiz-header">
-          <span id="question-progress">Question 1 of 50</span>
-          <div class="timer">Time Remaining: <span id="timer-count">60</span>s</div>
-        </div>
-        <h3 id="question-text">Loading question...</h3>
-        <div id="options-container" class="options-grid"></div>
-        <button id="next-btn" class="btn secondary hidden">Next Question</button>
-      </div>
-
-      <!-- Result Screen -->
-      <div id="result-screen" class="hidden">
-        <h3>Exam Summary</h3>
-        <p id="score-display"></p>
-        <div id="review-container"></div>
-        <button id="restart-btn" class="btn primary">Retake Exam</button>
-      </div>
-    </section>
-
-    <!-- ZONE B: CASE STUDIES -->
-    <section id="zone-cases" class="section-card">
-      <h2>Zone B: Practical Case Studies</h2>
-      <div class="case-grid">
-        <article class="case-item">
-          <h4>Case 1: Reducing Contact Rate via Self-Service in Mobile Banking</h4>
-          <p>Analyzing root-cause escalations and redesigning the in-app FAQ funnel to lower inbound call load by 18%.</p>
-          <a href="#" class="link-btn">Read Case Study →</a>
-        </article>
-        <article class="case-item">
-          <h4>Case 2: Journey Mapping for Omnichannel Escalations</h4>
-          <p>Aligning Frontline Operations and Product Owners using Stanford Decision Quality principles.</p>
-          <a href="#" class="link-btn">Read Case Study →</a>
-        </article>
-      </div>
-    </section>
-
-    <!-- ZONE C: COMMUNITY -->
-    <section id="zone-community" class="section-card">
-      <h2>Zone C: CX Community & Discussion</h2>
-      <p>Connect with other CX professionals, debate scenario solutions, and share exam insights.</p>
-      <div class="community-links">
-        <a href="https://t.me/your_telegram_channel" target="_blank" class="btn community-btn">Join Telegram Group</a>
-        <a href="https://discord.gg/your_discord" target="_blank" class="btn community-btn">Join Discord Community</a>
-      </div>
-    </section>
-  </main>
-
-  <script>
+<script>
     let questions = [];
     let currentIndex = 0;
     let score = 0;
@@ -88,13 +10,40 @@
     async function loadQuestions() {
       try {
         const res = await fetch('questions.json');
-        questions = await res.json();
+        const rawData = await res.json();
+        
+        // Normalize JSON: Extract option_0..3 into an array and adjust answerIndex
+        questions = rawData.map(q => {
+          const options = [];
+          if (q.option_0 !== undefined) options.push(q.option_0);
+          if (q.option_1 !== undefined) options.push(q.option_1);
+          if (q.option_2 !== undefined) options.push(q.option_2);
+          if (q.option_3 !== undefined) options.push(q.option_3);
+
+          // If answerIndex is 1-based (1, 2, 3, 4), convert to 0-based index (0, 1, 2, 3)
+          let correctIdx = typeof q.answerIndex === 'number' ? q.answerIndex - 1 : 0;
+          if (correctIdx < 0) correctIdx = 0;
+
+          return {
+            id: q.id,
+            question: q.question,
+            options: options.length > 0 ? options : (q.options || []),
+            answerIndex: correctIdx,
+            timeLimitSeconds: q.timeLimitSeconds || 60,
+            explanation: q.explanation || ''
+          };
+        });
+
       } catch (e) {
         console.error("Could not load questions.json", e);
       }
     }
 
     document.getElementById('start-btn').addEventListener('click', () => {
+      if (!questions.length) {
+        alert("Questions are still loading or could not be found.");
+        return;
+      }
       document.getElementById('start-screen').classList.add('hidden');
       document.getElementById('quiz-screen').classList.remove('hidden');
       currentIndex = 0;
@@ -106,7 +55,7 @@
     function showQuestion() {
       clearInterval(timer);
       const q = questions[currentIndex];
-      timeLeft = q.timeLimitSeconds || 60;
+      timeLeft = q.timeLimitSeconds;
       
       document.getElementById('question-progress').textContent = `Question ${currentIndex + 1} of ${questions.length}`;
       document.getElementById('timer-count').textContent = timeLeft;
@@ -193,5 +142,3 @@
 
     loadQuestions();
   </script>
-</body>
-</html>
