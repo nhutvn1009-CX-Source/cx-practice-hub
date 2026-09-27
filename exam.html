@@ -6,12 +6,162 @@
   <title>CX Maturity Diagnostic & Assessment</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    /* Inlined styles to guarantee instant styling without cache lag */
     .hidden { display: none !important; }
     .warning-text { color: #dc2626; font-weight: 600; margin-bottom: 0.5rem; }
     .row-missing { background-color: #fee2e2 !important; }
-    .radio-label { display: block; width: 100%; height: 100%; cursor: pointer; text-align: center; }
-    .radio-label input { width: 20px; height: 20px; cursor: pointer; accent-color: #0284c7; }
+
+    /* Table Container & Sticky Headline */
+    .table-responsive {
+      background: #ffffff;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      overflow: visible;
+      margin-bottom: 2rem;
+    }
+
+    .maturity-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      text-align: left;
+    }
+
+    .maturity-table th {
+      position: sticky;
+      top: 60px;
+      background: #f1f5f9;
+      z-index: 30;
+      border-bottom: 2px solid #cbd5e1;
+      padding: 1rem 0.75rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+    }
+
+    .maturity-table th.rate-col {
+      width: 115px;
+      text-align: center;
+      font-size: 1rem;
+      vertical-align: top;
+    }
+
+    .col-sub {
+      display: block;
+      font-size: 0.72rem;
+      color: #64748b;
+      font-weight: normal;
+      margin-top: 0.25rem;
+      line-height: 1.2;
+    }
+
+    /* Row Content & Full Question Visibility */
+    .maturity-table td {
+      padding: 1.25rem 0.75rem;
+      border-bottom: 1px solid #e2e8f0;
+      vertical-align: middle;
+    }
+
+    .maturity-table tbody tr:hover {
+      background-color: #f8fafc;
+    }
+
+    .q-num {
+      font-weight: 700;
+      color: #64748b;
+      text-align: center;
+      width: 45px;
+    }
+
+    .q-cat {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #0284c7;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.35rem;
+    }
+
+    .q-statement {
+      font-size: 0.98rem;
+      font-weight: 600;
+      color: #0f172a;
+      line-height: 1.5;
+      display: block;
+    }
+
+    .q-eval {
+      color: #64748b;
+      margin-top: 0.35rem;
+      font-size: 0.85rem;
+      line-height: 1.35;
+    }
+
+    /* Radio Inputs */
+    .radio-cell {
+      text-align: center;
+    }
+
+    .radio-label {
+      display: block;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+      padding: 0.5rem 0;
+    }
+
+    .radio-label input[type="radio"] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      accent-color: #0284c7;
+    }
+
+    /* Criteria Reference Card */
+    .criteria-card {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .criteria-title {
+      font-size: 1.05rem;
+      color: #0f172a;
+      margin-bottom: 0.85rem;
+      font-weight: 700;
+    }
+
+    .criteria-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .crit-item {
+      border-radius: 6px;
+      padding: 0.85rem;
+      border-left: 4px solid;
+      background: #f8fafc;
+      font-size: 0.85rem;
+    }
+
+    .crit-item strong {
+      display: block;
+      color: #0f172a;
+      font-size: 0.9rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .crit-item p {
+      color: #475569;
+      line-height: 1.35;
+      margin: 0;
+    }
+
+    .crit-1 { border-left-color: #94a3b8; }
+    .crit-2 { border-left-color: #f59e0b; background: #fffbeb; }
+    .crit-3 { border-left-color: #0284c7; background: #f0f9ff; }
+    .crit-4 { border-left-color: #6366f1; background: #eef2ff; }
+    .crit-5 { border-left-color: #10b981; background: #ecfdf5; }
   </style>
 </head>
 <body class="diagnostic-body">
@@ -24,29 +174,65 @@
 
   <main class="container diagnostic-container">
     
-    <!-- INTRO BANNER -->
     <div class="intro-box" id="intro-box">
       <h2>Assess Your Organization's CX Maturity</h2>
       <p>Evaluate your enterprise across 5 strategic dimensions using the 5-point maturity continuum. Rate each practice based on ground-truth operational reality, not aspirational intent.</p>
     </div>
 
-    <!-- ASSESSMENT FORM -->
+    <!-- RATING GUIDE -->
+    <div class="criteria-card" id="criteria-guide">
+      <div class="criteria-title">📌 Rating Criteria Reference Guide</div>
+      <div class="criteria-grid">
+        <div class="crit-item crit-1">
+          <strong>1 – Absent / Ad-Hoc</strong>
+          <p>No formal process; handled informally or reactively in isolated moments.</p>
+        </div>
+        <div class="crit-item crit-2">
+          <strong>2 – Developing / Siloed</strong>
+          <p>Exists in a few teams wearing blinders, with inconsistent tools and conflicting targets.</p>
+        </div>
+        <div class="crit-item crit-3">
+          <strong>3 – Coordinated / Tactical</strong>
+          <p>Standardized in core units, cross-functional conversations have begun, but systemic execution remains uneven.</p>
+        </div>
+        <div class="crit-item crit-4">
+          <strong>4 – Integrated / Strategic</strong>
+          <p>Governed enterprise-wide, tied to financial outcomes, with formalized routines across departments.</p>
+        </div>
+        <div class="crit-item crit-5">
+          <strong>5 – Ingrained / Transformational</strong>
+          <p>Embedded in daily operational DNA, continuous experimentation is standard, and teams proactively solve root causes.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ASSESSMENT TABLE -->
     <form id="maturity-form">
       <div class="table-responsive">
         <table class="maturity-table">
           <thead>
             <tr>
-              <th style="width: 40px;">#</th>
+              <th style="width: 45px;">#</th>
               <th>Dimension & Operational Practice</th>
-              <th class="rate-col">1<br><span class="col-sub">Absent / Ad-Hoc</span></th>
-              <th class="rate-col">2<br><span class="col-sub">Developing / Siloed</span></th>
-              <th class="rate-col">3<br><span class="col-sub">Coordinated / Tactical</span></th>
-              <th class="rate-col">4<br><span class="col-sub">Integrated / Strategic</span></th>
-              <th class="rate-col">5<br><span class="col-sub">Ingrained / Transformational</span></th>
+              <th class="rate-col" title="1 – Absent / Ad-Hoc: No formal process; handled informally or reactively in isolated moments.">
+                1<br><span class="col-sub">Absent / Ad-Hoc</span>
+              </th>
+              <th class="rate-col" title="2 – Developing / Siloed: Exists in a few teams wearing blinders, with inconsistent tools and conflicting targets.">
+                2<br><span class="col-sub">Developing / Siloed</span>
+              </th>
+              <th class="rate-col" title="3 – Coordinated / Tactical: Standardized in core units, cross-functional conversations have begun, but systemic execution remains uneven.">
+                3<br><span class="col-sub">Coordinated / Tactical</span>
+              </th>
+              <th class="rate-col" title="4 – Integrated / Strategic: Governed enterprise-wide, tied to financial outcomes, with formalized routines across departments.">
+                4<br><span class="col-sub">Integrated / Strategic</span>
+              </th>
+              <th class="rate-col" title="5 – Ingrained / Transformational: Embedded in daily operational DNA, continuous experimentation is standard, and teams proactively solve root causes.">
+                5<br><span class="col-sub">Ingrained / Transformational</span>
+              </th>
             </tr>
           </thead>
           <tbody id="questions-tbody">
-            <!-- Populated via script -->
+            <!-- Dynamically populated -->
           </tbody>
         </table>
       </div>
@@ -57,7 +243,7 @@
       </div>
     </form>
 
-    <!-- DIAGNOSTIC RESULTS REPORT -->
+    <!-- RESULTS REPORT -->
     <section id="results-panel" class="results-panel hidden">
       <div class="stage-hero">
         <div class="stage-avatar" id="stage-avatar">🎯</div>
@@ -102,152 +288,160 @@
   </main>
 
   <script>
-    // Embedded Data to prevent fetch/cache issues
     const diagnosticData = {
-      "dimensions": [
-        { "id": "dim_1", "name": "Executive Direction & Strategic Intent" },
-        { "id": "dim_2", "name": "Cross-Functional Alignment & Silo Elimination" },
-        { "id": "dim_3", "name": "Design Thinking & Human-Centered Innovation" },
-        { "id": "dim_4", "Frontline Enablement & Culture (EX to CX)", "name": "Frontline Enablement & Culture (EX to CX)" },
-        { "id": "dim_5", "name": "Measurement, Lagging Metrics & Closed-Loop Action" }
+      dimensions: [
+        { id: "dim_1", name: "Executive Direction & Strategic Intent" },
+        { id: "dim_2", name: "Cross-Functional Alignment & Silo Elimination" },
+        { id: "dim_3", name: "Design Thinking & Human-Centered Innovation" },
+        { id: "dim_4", name: "Frontline Enablement & Culture (EX to CX)" },
+        { id: "dim_5", name: "Measurement, Lagging Metrics & Closed-Loop Action" }
       ],
-      "questions": [
-        { "id": 1, "dimension_id": "dim_1", "category": "Executive Alignment", "statement": "The CEO and executive leadership treat CX as an active driver of sustainable business strategy and budget allocation, rather than an operational cost center.", "evaluates": "Executive sponsorship, resource prioritization, and strategic mindset." },
-        { "id": 2, "dimension_id": "dim_1", "category": "Strategic Intent", "statement": "Business strategies and resource allocations are formulated around outside-in customer journeys rather than inside-out functional convenience.", "evaluates": "Journey-centric strategy versus departmental convenience." },
-        { "id": 3, "dimension_id": "dim_1", "category": "Executive Empathy", "statement": "Senior executives routinely review unfiltered customer feedback and directly participate in customer listening sessions or frontline shadowing.", "evaluates": "Executive ground-truth awareness and listening hygiene." },
-        { "id": 4, "dimension_id": "dim_1", "category": "Financial Justification", "statement": "CX initiatives require substantiated business cases that link planned experience enhancements to projected ROI, cost-to-serve reductions, or revenue growth.", "evaluates": "Financial discipline and business case maturity." },
-        { "id": 5, "dimension_id": "dim_2", "category": "Governance", "statement": "A multi-stakeholder governance council (Product, Ops, IT, Marketing, Finance) actively aligns roadmaps to harmonize competing functional priorities.", "evaluates": "Cross-functional decision making and friction triage." },
-        { "id": 6, "dimension_id": "dim_2", "category": "Operational Handoffs", "statement": "Customer touchpoint handoffs between departments are governed using clear RACI roles, actively eliminating areas of 'responsibility ambiguity.'", "evaluates": "Process continuity and reduction of inter-department handoff drop-offs." },
-        { "id": 7, "dimension_id": "dim_2", "category": "Back-Office Integration", "statement": "Back-office and enabling teams (IT, Finance, Legal, Compliance) clearly understand and evaluate how their internal policies directly impact customer friction.", "evaluates": "Enabling department empathy and policy friction management." },
-        { "id": 8, "dimension_id": "dim_2", "category": "KPI Harmonization", "statement": "Operational KPIs across business units are structured to reward end-to-end journey success rather than encouraging teams to protect their own siloed metrics.", "evaluates": "Systemic incentives versus localized functional optimization." },
-        { "id": 9, "dimension_id": "dim_3", "category": "Customer Discovery", "statement": "Teams use structured discovery (such as customer interviews and journey maps) to uncover unarticulated customer needs before defining technical solutions.", "evaluates": "Qualitative research and problem definition discipline." },
-        { "id": 10, "dimension_id": "dim_3", "category": "Root Cause Analysis", "statement": "Problems are addressed using Root Cause Analysis (e.g., the 5 Whys, Fishbone diagrams) to solve foundational defects rather than deploying operational 'band-aids.'", "evaluates": "Depth of analytical problem solving." },
-        { "id": 11, "dimension_id": "dim_3", "category": "Iterative Validation", "statement": "New service concepts and digital workflows are iteratively tested via low-cost prototypes with real customers to validate usability before full technical deployment.", "evaluates": "De-risking innovation and testing before scaling." },
-        { "id": 12, "dimension_id": "dim_3", "category": "Balanced Innovation", "statement": "Experience innovation systematically balances human desirability, technical feasibility, and economic/business viability.", "evaluates": "Triple-lens innovation filter for viable transformation." },
-        { "id": 13, "dimension_id": "dim_4", "category": "Service-Profit Chain", "statement": "Leadership systematically manages the Service-Profit Chain, recognizing that frontline employee experience directly drives customer retention and service quality.", "evaluates": "Executive understanding of the direct link between EX and CX." },
-        { "id": 14, "dimension_id": "dim_4", "category": "Frontline Autonomy", "statement": "Frontline employees possess the documented authority and autonomy to resolve customer complaints in real time without navigating bureaucratic manager sign-offs.", "evaluates": "First-contact empowered resolution and low-friction service recovery." },
-        { "id": 15, "dimension_id": "dim_4", "category": "Voice of the Employee", "statement": "A structured Voice of the Employee (VoE) channel regularly gathers, acknowledges, and acts on frontline insights regarding broken internal workflows.", "evaluates": "Frontline knowledge capture and process bottleneck remediation." },
-        { "id": 16, "dimension_id": "dim_4", "category": "Performance Integrity", "statement": "Performance incentives celebrate customer-centric behaviors and quality resolution, specifically designed to avoid the manipulation or 'gaming' of survey scores.", "evaluates": "Incentive design hygiene and score integrity." },
-        { "id": 17, "dimension_id": "dim_5", "category": "Leading Indicators", "statement": "Operational leading indicators (e.g., system outages, queue backlogs, handle times) are monitored in real time alongside lagging survey metrics to predict customer distress.", "evaluates": "Telemetry pairing of operational (O-data) with experience (X-data)." },
-        { "id": 18, "dimension_id": "dim_5", "category": "Lagging Financial Impact", "statement": "Customer sentiment metrics (CSAT, CES, NPS) are statistically correlated with lagging commercial outcomes: Churn Rate, Retention Rate, CLV, or Earned Growth.", "evaluates": "Commercial validation and economic correlation of sentiment." },
-        { "id": 19, "dimension_id": "dim_5", "category": "Inner Loop Execution", "statement": "A frontline 'Inner Loop' process ensures that dissatisfied customer feedback triggers a direct, rapid operational follow-up to recover the relationship.", "evaluates": "Individual transactional service recovery within 24 to 48 hours." },
-        { "id": 20, "dimension_id": "dim_5", "category": "Outer Loop Remediation", "statement": "An 'Outer Loop' cross-functional mechanism aggregates feedback trends and error telemetry to prioritize structural product, system, and policy redesigns.", "evaluates": "Cross-functional systemic defect eradication." }
+      questions: [
+        { id: 1, dimension_id: "dim_1", category: "Executive Alignment", statement: "The CEO and executive leadership treat CX as an active driver of sustainable business strategy and budget allocation, rather than an operational cost center.", evaluates: "Executive sponsorship, resource prioritization, and strategic mindset." },
+        { id: 2, dimension_id: "dim_1", category: "Strategic Intent", statement: "Business strategies and resource allocations are formulated around outside-in customer journeys rather than inside-out functional convenience.", evaluates: "Journey-centric strategy versus departmental convenience." },
+        { id: 3, dimension_id: "dim_1", category: "Executive Empathy", statement: "Senior executives routinely review unfiltered customer feedback and directly participate in customer listening sessions or frontline shadowing.", evaluates: "Executive ground-truth awareness and listening hygiene." },
+        { id: 4, dimension_id: "dim_1", category: "Financial Justification", statement: "CX initiatives require substantiated business cases that link planned experience enhancements to projected ROI, cost-to-serve reductions, or revenue growth.", evaluates: "Financial discipline and business case maturity." },
+        { id: 5, dimension_id: "dim_2", category: "Governance", statement: "A multi-stakeholder governance council (Product, Ops, IT, Marketing, Finance) actively aligns roadmaps to harmonize competing functional priorities.", evaluates: "Cross-functional decision making and friction triage." },
+        { id: 6, dimension_id: "dim_2", category: "Operational Handoffs", statement: "Customer touchpoint handoffs between departments are governed using clear RACI roles, actively eliminating areas of 'responsibility ambiguity.'", evaluates: "Process continuity and reduction of inter-department handoff drop-offs." },
+        { id: 7, dimension_id: "dim_2", category: "Back-Office Integration", statement: "Back-office and enabling teams (IT, Finance, Legal, Compliance) clearly understand and evaluate how their internal policies directly impact customer friction.", evaluates: "Enabling department empathy and policy friction management." },
+        { id: 8, dimension_id: "dim_2", category: "KPI Harmonization", statement: "Operational KPIs across business units are structured to reward end-to-end journey success rather than encouraging teams to protect their own siloed metrics.", evaluates: "Systemic incentives versus localized functional optimization." },
+        { id: 9, dimension_id: "dim_3", category: "Customer Discovery", statement: "Teams use structured discovery (such as customer interviews and journey maps) to uncover unarticulated customer needs before defining technical solutions.", evaluates: "Qualitative research and problem definition discipline." },
+        { id: 10, dimension_id: "dim_3", category: "Root Cause Analysis", statement: "Problems are addressed using Root Cause Analysis (e.g., the 5 Whys, Fishbone diagrams) to solve foundational defects rather than deploying operational 'band-aids.'", evaluates: "Depth of analytical problem solving." },
+        { id: 11, dimension_id: "dim_3", category: "Iterative Validation", statement: "New service concepts and digital workflows are iteratively tested via low-cost prototypes with real customers to validate usability before full technical deployment.", evaluates: "De-risking innovation and testing before scaling." },
+        { id: 12, dimension_id: "dim_3", category: "Balanced Innovation", statement: "Experience innovation systematically balances human desirability, technical feasibility, and economic/business viability.", evaluates: "Triple-lens innovation filter for viable transformation." },
+        { id: 13, dimension_id: "dim_4", category: "Service-Profit Chain", statement: "Leadership systematically manages the Service-Profit Chain, recognizing that frontline employee experience directly drives customer retention and service quality.", evaluates: "Executive understanding of the direct link between EX and CX." },
+        { id: 14, dimension_id: "dim_4", category: "Frontline Autonomy", statement: "Frontline employees possess the documented authority and autonomy to resolve customer complaints in real time without navigating bureaucratic manager sign-offs.", evaluates: "First-contact empowered resolution and low-friction service recovery." },
+        { id: 15, dimension_id: "dim_4", category: "Voice of the Employee", statement: "A structured Voice of the Employee (VoE) channel regularly gathers, acknowledges, and acts on frontline insights regarding broken internal workflows.", evaluates: "Frontline knowledge capture and process bottleneck remediation." },
+        { id: 16, dimension_id: "dim_4", category: "Performance Integrity", statement: "Performance incentives celebrate customer-centric behaviors and quality resolution, specifically designed to avoid the manipulation or 'gaming' of survey scores.", evaluates: "Incentive design hygiene and score integrity." },
+        { id: 17, dimension_id: "dim_5", category: "Leading Indicators", statement: "Operational leading indicators (e.g., system outages, queue backlogs, handle times) are monitored in real time alongside lagging survey metrics to predict customer distress.", evaluates: "Telemetry pairing of operational (O-data) with experience (X-data)." },
+        { id: 18, dimension_id: "dim_5", category: "Lagging Financial Impact", statement: "Customer sentiment metrics (CSAT, CES, NPS) are statistically correlated with lagging commercial outcomes: Churn Rate, Retention Rate, CLV, or Earned Growth.", evaluates: "Commercial validation and economic correlation of sentiment." },
+        { id: 19, dimension_id: "dim_5", category: "Inner Loop Execution", statement: "A frontline 'Inner Loop' process ensures that dissatisfied customer feedback triggers a direct, rapid operational follow-up to recover the relationship.", evaluates: "Individual transactional service recovery within 24 to 48 hours." },
+        { id: 20, dimension_id: "dim_5", category: "Outer Loop Remediation", statement: "An 'Outer Loop' cross-functional mechanism aggregates feedback trends and error telemetry to prioritize structural product, system, and policy redesigns.", evaluates: "Cross-functional systemic defect eradication." }
       ],
-      "maturity_stages": [
+      maturity_stages: [
         {
-          "stage_id": "stage_1",
-          "name": "Nascent",
-          "score_range": { "min": 20, "max": 35 },
-          "summary": "Customer experience is ad-hoc, informal, and viewed as an isolated cost center.",
-          "operational_reality": [
+          stage_id: "stage_1",
+          name: "Nascent",
+          score_range: { min: 20, max: 35 },
+          summary: "Customer experience is ad-hoc, informal, and viewed as an isolated cost center.",
+          operational_reality: [
             "Leadership Detachment: Executive meetings focus exclusively on short-term sales volume, cost-cutting, and internal throughput; CX is dismissed as a soft marketing slogan.",
             "The 'Meandering Project' Trap: CX exists as a part-time assignment handed to an arbitrary project manager with no formal budget, authority, or clear business objectives.",
             "Siloed Reality & Blame Culture: Departments operate as isolated fortresses; when an onboarding or billing failure occurs, Sales, Ops, and IT blame each other.",
             "Disconnected Measurement: Customer feedback consists of an occasional survey sent to an arbitrary list; scores sit unread in a spreadsheet while complaints are handled reactively.",
             "Frontline Exhaustion: Agents bear the brunt of customer frustration with zero autonomy or systemic fixes, judged purely on call speed (AHT) rather than resolution."
           ],
-          "immediate_operational_priorities": [
+          immediate_operational_priorities: [
             "Establish a Single Journey Baseline: Select one high-friction, high-volume touchpoint (e.g., onboarding or digital checkout) and document the current state from the outside-in.",
             "Capture Paired O-Data and X-Data: Collect operational cycle times and drop-offs alongside transactional Customer Effort Score (CES) or CSAT to diagnose what is happening and why.",
             "Deliver and Quantify an Early Quick Win: Mobilize a small, informal team across customer service and ops to fix one glaring defect, calculating cost savings or churn reduction.",
             "Educate Executive Leadership: Present the quick win and unfiltered customer verbatim feedback directly to senior leadership to prove that experience defects directly drain profit."
           ],
-          "relevant_lagging_metrics": ["Transactional CSAT", "Complaint Volume", "Early Churn Rate"]
+          relevant_lagging_metrics: ["Transactional CSAT", "Complaint Volume", "Early Churn Rate"]
         },
         {
-          "stage_id": "stage_2",
-          "name": "Basic",
-          "score_range": { "min": 36, "max": 51 },
-          "summary": "Pockets of uncoordinated CX activity operate within functional silos with an inside-out focus on scores.",
-          "operational_reality": [
+          stage_id: "stage_2",
+          name: "Basic",
+          score_range: { min: 36, max: 51 },
+          summary: "Pockets of uncoordinated CX activity operate within functional silos with an inside-out focus on scores.",
+          operational_reality: [
             "Uncoordinated Activity: Support, Marketing, and Digital run independent surveys using conflicting scales, multiple software tools, and unaligned timing.",
             "Inside-Out Score Obsession: Teams focus entirely on 'hitting the target score' rather than understanding root causes, occasionally cherry-picking customers to artificially inflate ratings.",
             "Handoff Black Holes: Individual touchpoints perform well in isolation, but customers fall through the cracks during transitions (e.g., Sales to Onboarding), causing duplicate paperwork.",
             "Back-Office Apathy: Legal, Finance, Risk, and IT consider CX irrelevant to their remit, establishing restrictive operational policies purely for internal administrative ease.",
             "Survey Fatigue Without Action: Customers receive surveys after every minor touchpoint but never hear back when reporting friction, degrading response rates over time."
           ],
-          "immediate_operational_priorities": [
+          immediate_operational_priorities: [
             "Form an Informal Cross-Functional Working Group: Run bi-weekly working sessions with mid-level managers from Support, Sales, Marketing, and Ops to coordinate efforts.",
             "Harmonize Feedback Scales & Governance: Standardize question scales (e.g., adopting consistent 5- or 7-point formats) and establish contact frequency rules to avoid survey fatigue.",
             "Map the End-to-End Customer Journey: Run cross-functional workshops to map the customer's full lifecycle, identifying friction points where internal definitions clash with expectations.",
             "Begin Systematic Root Cause Analysis: Shift reporting from vanity averages to categorizing qualitative feedback, using the 5 Whys and Pareto analysis on top customer complaints."
           ],
-          "relevant_lagging_metrics": ["Customer Effort Score (CES)", "First Contact Resolution (FCR)", "Survey Response Rates"]
+          relevant_lagging_metrics: ["Customer Effort Score (CES)", "First Contact Resolution (FCR)", "Survey Response Rates"]
         },
         {
-          "stage_id": "stage_3",
-          "name": "Tactical",
-          "score_range": { "min": 52, "max": 67 },
-          "summary": "Core CX competencies and frontline closed loops exist, but systemic cross-functional alignment remains uneven.",
-          "operational_reality": [
+          stage_id: "stage_3",
+          name: "Tactical",
+          score_range: { min: 52, max: 67 },
+          summary: "Core CX competencies and frontline closed loops exist, but systemic cross-functional alignment remains uneven.",
+          operational_reality: [
             "Emergence of CX Competency: Dedicated CX practitioners develop journey maps, research-backed personas, and customer insights, though funding remains project-based.",
             "Active Inner Loop, Stalled Outer Loop: Supervisors promptly contact dissatisfied survey respondents to apologize or issue refunds, but underlying software or policy defects remain unfixed.",
             "Role Ambiguity Across Journey Stages: Journey maps are visually shared, but daily ownership is contested; when a cross-departmental defect surfaces, teams dispute funding and responsibility.",
             "Descriptive Metric Saturation: Dashboards monitor NPS, CSAT, and handle times, but teams struggle to demonstrate statistical correlations between sentiment and business retention."
           ],
-          "immediate_operational_priorities": [
+          immediate_operational_priorities: [
             "Charter a Formal CX Steering Committee: Establish an executive-sponsored council (Product, Ops, IT, Finance) meeting monthly to triage systemic issues and align roadmaps.",
             "Establish Cross-Functional RACI Frameworks: Formally define ownership matrices across every critical journey handoff to eliminate responsibility ambiguity.",
             "Operationalize the Outer Loop: Deploy cross-functional squads utilizing root cause frameworks (Fishbone diagrams, Six Sigma DMAIC) to eliminate the top 3 structural friction drivers.",
             "Connect CX Metrics to Financial Lagging Indicators: Partner with Finance to statistically correlate NPS/CSAT movements with Customer Retention Rate, Churn Cost, and Customer Lifetime Value."
           ],
-          "relevant_lagging_metrics": ["Customer Retention Rate", "Net Promoter Score (NPS)", "Cost-to-Serve"]
+          relevant_lagging_metrics: ["Customer Retention Rate", "Net Promoter Score (NPS)", "Cost-to-Serve"]
         },
         {
-          "stage_id": "stage_4",
-          "name": "Strategic",
-          "score_range": { "min": 68, "max": 83 },
-          "summary": "Enterprise governance, human-centered design, and financial metric integration drive decision-making.",
-          "operational_reality": [
+          stage_id: "stage_4",
+          name: "Strategic",
+          score_range: { min: 68, max: 83 },
+          summary: "Enterprise governance, human-centered design, and financial metric integration drive decision-making.",
+          operational_reality: [
             "Institutionalized Governance: An executive CX leader (CCO or VP) reports to the C-suite, guiding enterprise roadmaps and embedding CX goals into leadership evaluations.",
             "Outside-In Strategic Planning: Corporate strategy routinely balances operational efficiency with intended customer experiences and brand promises.",
             "Paired Leading and Lagging Telemetry: Real-time operational indicators (error spikes, cycle delays, queue times) trigger proactive interventions before customer sentiment turns negative.",
             "Active Design Thinking Practices: Product and operational teams prototype service blueprints and run iterative usability tests with real users before writing technical code.",
             "Emerging Cultural Strains: Frontline empowerment sometimes meets friction from conservative legal, risk, or compliance rules, limiting agent discretion in complex cases."
           ],
-          "immediate_operational_priorities": [
+          immediate_operational_priorities: [
             "Scale Low-Fidelity Prototyping: Institutionalize a human-centered design methodology across all business units, mandating usability validation before engineering deployment.",
             "Deepen Frontline Empowerment: Provide frontline agents with clear financial discretion and policy autonomy to resolve customer issues immediately without management approval.",
             "Build a Robust Voice of the Employee (VoE) Architecture: Create formal feedback systems where frontline staff submit friction points, with engineering tracking them in backlog sprint reviews.",
             "Implement Key Driver & Predictive Analytics: Apply regression and natural language processing to customer verbatims and call transcripts to uncover primary levers driving CLV."
           ],
-          "relevant_lagging_metrics": ["Customer Lifetime Value (CLV)", "Net Revenue Retention (NRR)", "Earned Growth Rate"]
+          relevant_lagging_metrics: ["Customer Lifetime Value (CLV)", "Net Revenue Retention (NRR)", "Earned Growth Rate"]
         },
         {
-          "stage_id": "stage_5",
-          "name": "Transformational",
-          "score_range": { "min": 84, "max": 100 },
-          "summary": "Customer-centricity is the natural operating system, uniting employee experience, continuous innovation, and predictive delivery.",
-          "operational_reality": [
+          stage_id: "stage_5",
+          name: "Transformational",
+          score_range: { min: 84, max: 100 },
+          summary: "Customer-centricity is the natural operating system, uniting employee experience, continuous innovation, and predictive delivery.",
+          operational_reality: [
             "Customer-Centric Cultural DNA: CX is not an isolated department; every employee—from accounting to DevOps—understands how their work directly impacts the customer experience.",
             "Living the Service-Profit Chain: Leadership actively manages the connection between employee well-being, psychological safety, and customer satisfaction.",
             "Safe Experimentation & Agility: Teams operate in a blameless culture that tests bold service concepts, learns from early iterations, and adapts dynamically without fear of reprisal.",
             "Engineered Peak-End Experiences: Journey interactions are intentionally designed to elicit positive emotions during critical moments of truth and journey conclusions.",
             "Predictive & Proactive Delivery: Automated telemetry and intelligent systems identify anomalies, resolving customer issues proactively before the customer even notices."
           ],
-          "immediate_operational_priorities": [
+          immediate_operational_priorities: [
             "Drive Continuous Experience Innovation: Leverage ethnographic immersion and customer co-creation labs to uncover unarticulated needs and pioneer new business models.",
             "Unify EX and CX Operating Architectures: Partner with Human Resources to embed journey management and customer-centric behaviors directly into hiring, onboarding, and appraisals.",
             "Automate Prescriptive Care Interventions: Transition real-time telemetry into automated interventions (such as automated account credits or outbound check-ins) upon detecting operational friction.",
             "Guard Against Cultural Complacency: Maintain competitive audits outside your immediate sector to anticipate rising customer expectations shaped by global industry leaders."
           ],
-          "relevant_lagging_metrics": ["Earned Growth Rate", "Employee Engagement Index", "Total Shareholder Return (TSR) / Enterprise Valuation"]
+          relevant_lagging_metrics: ["Earned Growth Rate", "Employee Engagement Index", "Total Shareholder Return (TSR) / Enterprise Valuation"]
         }
       ]
     };
 
     const STAGE_AVATARS = {
-      "stage_1": { icon: "🏕️", titleBadge: "Level 1: The Ad-Hoc Pioneer" },
-      "stage_2": { icon: "🧱", titleBadge: "Level 2: The Silo Juggler" },
-      "stage_3": { icon: "🚒", titleBadge: "Level 3: The Tactical Firefighter" },
-      "stage_4": { icon: "🧭", titleBadge: "Level 4: The Strategic Navigator" },
-      "stage_5": { icon: "🚀", titleBadge: "Level 5: The Galactic CX Unicorn" }
+      stage_1: { icon: "🏕️", titleBadge: "Level 1: The Ad-Hoc Pioneer" },
+      stage_2: { icon: "🧱", titleBadge: "Level 2: The Silo Juggler" },
+      stage_3: { icon: "🚒", titleBadge: "Level 3: The Tactical Firefighter" },
+      stage_4: { icon: "🧭", titleBadge: "Level 4: The Strategic Navigator" },
+      stage_5: { icon: "🚀", titleBadge: "Level 5: The Galactic CX Unicorn" }
     };
 
-    let userRatings = {};
+    const RATING_TOOLTIPS = {
+      1: "1 – Absent / Ad-Hoc: No formal process; handled informally or reactively in isolated moments.",
+      2: "2 – Developing / Siloed: Exists in a few teams wearing blinders, with inconsistent tools and conflicting targets.",
+      3: "3 – Coordinated / Tactical: Standardized in core units, cross-functional conversations have begun, but systemic execution remains uneven.",
+      4: "4 – Integrated / Strategic: Governed enterprise-wide, tied to financial outcomes, with formalized routines across departments.",
+      5: "5 – Ingrained / Transformational: Embedded in daily operational DNA, continuous experimentation is standard, and teams proactively solve root causes."
+    };
+
+    const userRatings = {};
 
     function renderTable() {
       const tbody = document.getElementById('questions-tbody');
+      if (!tbody) return;
       tbody.innerHTML = '';
 
       diagnosticData.questions.forEach((q) => {
@@ -259,11 +453,11 @@
           <td>
             <div class="q-cat">${q.category}</div>
             <div class="q-statement">${q.statement}</div>
-            <div class="q-eval"><small>Focus: ${q.evaluates}</small></div>
+            <div class="q-eval"><strong>Focus:</strong> ${q.evaluates}</div>
           </td>
           ${[1, 2, 3, 4, 5].map(val => `
             <td class="radio-cell">
-              <label class="radio-label">
+              <label class="radio-label" title="${RATING_TOOLTIPS[val]}">
                 <input type="radio" name="q_${q.id}" value="${val}" onchange="handleSelect(${q.id},${val})" />
               </label>
             </td>
@@ -294,8 +488,10 @@
         diagnosticData.questions.forEach(q => {
           if (!userRatings[q.id]) {
             const row = document.getElementById(`q-row-${q.id}`);
-            row.classList.add('row-missing');
-            if (!firstMissing) firstMissing = row;
+            if (row) {
+              row.classList.add('row-missing');
+              if (!firstMissing) firstMissing = row;
+            }
           }
         });
         if (firstMissing) {
@@ -321,7 +517,6 @@
       document.getElementById('stage-summary').textContent = stage.summary;
       document.getElementById('total-score-val').textContent = totalScore;
 
-      // Dimensions progress bars
       const dimMap = {};
       diagnosticData.dimensions.forEach(d => dimMap[d.id] = { name: d.name, score: 0, count: 0 });
       diagnosticData.questions.forEach(q => {
@@ -347,7 +542,6 @@
         dimBars.appendChild(div);
       });
 
-      // Operational Reality & Priorities
       document.getElementById('operational-reality-list').innerHTML = 
         stage.operational_reality.map(item => `<li>${item}</li>`).join('');
       document.getElementById('priorities-list').innerHTML = 
@@ -355,8 +549,8 @@
       document.getElementById('metrics-chips').innerHTML = 
         stage.relevant_lagging_metrics.map(m => `<span class="metric-chip">${m}</span>`).join('');
 
-      // View toggle
       document.getElementById('intro-box').classList.add('hidden');
+      document.getElementById('criteria-guide').classList.add('hidden');
       document.getElementById('maturity-form').classList.add('hidden');
       document.getElementById('results-panel').classList.remove('hidden');
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -366,7 +560,7 @@
       location.reload();
     };
 
-    // Render immediately on load
+    // Render all 20 rows on load
     renderTable();
   </script>
 </body>
