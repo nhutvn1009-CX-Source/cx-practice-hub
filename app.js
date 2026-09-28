@@ -705,7 +705,7 @@ document.addEventListener('DOMContentLoaded', () => {
      ========================================================================== */
   const copyEmailBtn = document.getElementById('copy-email-btn');
   const copyToast = document.getElementById('copy-toast');
-  const CONTACT_EMAIL = 'nhut.cxleader@gmail.com'; // Default contact handle
+  const CONTACT_EMAIL = 'nhutvn1009@gmail.com'; // Default contact handle
 
   if (copyEmailBtn) {
     copyEmailBtn.addEventListener('click', async () => {
