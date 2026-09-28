@@ -1,57 +1,447 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CX Practice Hub</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CX Working Diary & Pragmatic Hub</title>
+  <meta name="description" content="A practitioner's working diary on customer experience architecture, pragmatic maturity diagnostics, and root-cause case studies.">
+  
+  <!-- Typography: Roboto & Roboto Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="navbar">
-    <div class="logo">CX Practice Hub</div>
-    <nav>
-      <a href="exam.html">Zone A: Mock Exam</a>
-      <a href="#zone-cases">Zone B: Case Studies</a>
-      <a href="#zone-community">Zone C: Community</a>
-    </nav>
+  <!-- Global Navigation -->
+  <header class="site-header">
+    <div class="container header-container">
+      <a href="#home" class="brand-logo" aria-label="CX Practice Hub Home">
+        <span class="logo-symbol">⟐</span>
+        <span class="logo-text">CX Field Diary</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Primary Navigation">
+        <ul class="nav-list">
+          <li><a href="#home" class="nav-link active" data-page="home">Diagnostic & Cases</a></li>
+          <li><a href="#bio" class="nav-link" data-page="bio">Practitioner Diary (Bio)</a></li>
+          <li><a href="#connect" class="nav-link nav-btn-outline" id="open-connect-nav">Connect</a></li>
+        </ul>
+      </nav>
+    </div>
   </header>
 
-  <main class="container">
-    <!-- ZONE A CARD -->
-    <section class="section-card">
-      <h2>Zone A: CX Knowledge Assessment (Mock Exam)</h2>
-      <p>Simulate the full certification testing environment with our timed question bank, question matrix navigation, and post-exam detailed rationales.</p>
-      <div style="margin-top: 1.5rem;">
-        <a href="exam.html" class="btn primary" style="text-decoration:none; display:inline-block;">Launch Mock Exam →</a>
-      </div>
-    </section>
+  <!-- Notification Banner -->
+  <div class="announcement-banner">
+    <div class="container banner-content">
+      <span class="badge badge-earth">Field Notes</span>
+      <span>A practical, no-hype working space dedicated to sustainable journey design and root-cause service recovery.</span>
+    </div>
+  </div>
 
-    <!-- ZONE B CARD -->
-    <section id="zone-cases" class="section-card">
-      <h2>Zone B: Practical Case Studies</h2>
-      <div class="case-grid">
-        <article class="case-item">
-          <h4>Case 1: Reducing Contact Rate via Self-Service in Mobile Banking</h4>
-          <p>Analyzing root-cause escalations and redesigning the in-app FAQ funnel to lower inbound call load by 18%.</p>
-          <a href="#" class="link-btn">Read Case Study →</a>
-        </article>
-        <article class="case-item">
-          <h4>Case 2: Journey Mapping for Omnichannel Escalations</h4>
-          <p>Aligning Frontline Operations and Product Owners using Stanford Decision Quality principles.</p>
-          <a href="#" class="link-btn">Read Case Study →</a>
-        </article>
-      </div>
-    </section>
+  <main id="main-content">
+    <!-- ========================================== -->
+    <!-- VIEW 1: HOME PAGE (DIAGNOSTIC & CASES)     -->
+    <!-- ========================================== -->
+    <div id="page-home" class="page-view active">
+      <!-- Section: Hero Intro -->
+      <section class="section hero-section">
+        <div class="container hero-layout">
+          <div class="hero-copy">
+            <span class="eyebrow">Practitioner Toolkit</span>
+            <h1 class="hero-title">Pragmatic CX Maturity & Field Case Studies</h1>
+            <p class="hero-lead">
+              Real operational customer experience isn’t about inflated metrics or survey vanity. 
+              Assess systemic friction across five core organizational dimensions, or explore practical resolution trees built from frontline realities.
+            </p>
+            <div class="hero-actions">
+              <a href="#maturity-audit" class="btn btn-primary">Run 20-Q Maturity Diagnostic ↓</a>
+              <a href="#case-studies" class="btn btn-secondary">Browse Field Cases</a>
+            </div>
+          </div>
+          <div class="hero-card">
+            <div class="hero-card-header">
+              <span class="status-indicator"></span> Diagnostic Scope (CXPA / HCD)
+            </div>
+            <ul class="hero-features">
+              <li><strong>20 Pragmatic Indicators:</strong> From executive listening to outer-loop fixes.</li>
+              <li><strong>Zero Scoring Fluff:</strong> Identifies structural handoff and incentive traps.</li>
+              <li><strong>Targeted Priorities:</strong> Direct, actionable steps tailored to your score band.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
 
-    <!-- ZONE C CARD -->
-    <section id="zone-community" class="section-card">
-      <h2>Zone C: CX Community & Discussion</h2>
-      <p>Connect with other CX practitioners, share exam preparation strategies, and review complex scenario questions.</p>
-      <div class="community-links" style="margin-top: 1rem;">
-        <a href="https://t.me/" target="_blank" class="btn community-btn">Join Telegram Group</a>
-        <a href="https://discord.gg/" target="_blank" class="btn community-btn">Join Discord Community</a>
-      </div>
-    </section>
+      <!-- Section: CX Maturity Assessment Engine -->
+      <section id="maturity-audit" class="section diagnostic-section">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-tag">Self-Audit</span>
+            <h2>Pragmatic CX Maturity Diagnostic</h2>
+            <p class="section-subtitle">
+              Derived from the CXPA Book of Knowledge and Human-Centered Design lifecycles. Rate your operational state honestly from 1 (Absent) to 5 (Ingrained).
+            </p>
+          </div>
+
+          <div class="audit-wrapper">
+            <!-- Progress Tracker -->
+            <div class="audit-progress-card">
+              <div class="progress-info">
+                <span id="answered-count-text">Questions Answered: 0 / 20</span>
+                <span id="completion-pct-text">0% Complete</span>
+              </div>
+              <div class="progress-bar-track" role="progressbar" aria-valuemin="0" aria-valuemax="20" aria-valuenow="0" id="audit-progressbar">
+                <div class="progress-bar-fill" id="progress-bar-fill"></div>
+              </div>
+            </div>
+
+            <!-- Questions Form Container -->
+            <form id="cx-audit-form" class="audit-questions-container" novalidate>
+              <!-- Populated dynamically via app.js -->
+              <div id="dimensions-accordion" class="dimensions-accordion"></div>
+
+              <div class="audit-form-actions">
+                <button type="button" id="calculate-score-btn" class="btn btn-primary btn-lg" disabled>
+                  Generate Maturity Diagnostic Report
+                </button>
+                <button type="button" id="reset-audit-btn" class="btn btn-outline">
+                  Reset Audit
+                </button>
+              </div>
+            </form>
+
+            <!-- Results Output Region -->
+            <div id="audit-results" class="audit-results-card" hidden tabindex="-1" aria-live="polite">
+              <div class="results-header">
+                <div>
+                  <span class="results-tag">Audit Diagnostic Result</span>
+                  <h3 id="result-stage-name" class="result-title">Stage Name</h3>
+                </div>
+                <div class="score-display">
+                  <div class="score-number" id="result-total-score">0</div>
+                  <div class="score-denom">/ 100</div>
+                </div>
+              </div>
+
+              <p id="result-stage-summary" class="result-summary-lead"></p>
+
+              <!-- Dimension Breakdown -->
+              <div class="dimension-breakdown-section">
+                <h4>Pillar Performance Breakdown</h4>
+                <div class="dimension-bars" id="dimension-score-bars"></div>
+              </div>
+
+              <!-- Operational Realities & Priorities Grid -->
+              <div class="results-detail-grid">
+                <div class="results-column">
+                  <h4 class="col-title col-realities">Operational Reality (Symptoms in Practice)</h4>
+                  <ul id="result-realities-list" class="styled-list"></ul>
+                </div>
+                <div class="results-column">
+                  <h4 class="col-title col-priorities">Immediate Operational Priorities</h4>
+                  <ul id="result-priorities-list" class="styled-list"></ul>
+                </div>
+              </div>
+
+              <!-- Relevant Metrics -->
+              <div class="results-metrics-footer">
+                <strong>Recommended Metric Focus for this Stage:</strong>
+                <span id="result-metrics-tags" class="metrics-tags"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section: Case Studies & Resolution Trees -->
+      <section id="case-studies" class="section cases-section">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-tag">Field Notes</span>
+            <h2>Case Study Catalog & Resolution Trees</h2>
+            <p class="section-subtitle">
+              Pragmatic teardowns of real operational challenges: what broke, the diagnostic approach, and the actual trade-offs encountered.
+            </p>
+          </div>
+
+          <!-- Catalog Toolbar -->
+          <div class="catalog-toolbar">
+            <div class="search-input-wrapper">
+              <label for="case-search-input" class="visually-hidden">Search Case Studies</label>
+              <input type="search" id="case-search-input" placeholder="Search by symptom, metric, or framework (e.g., SLA, VoE, Self-Service)..." autocomplete="off">
+              <span class="search-icon" aria-hidden="true">⌕</span>
+            </div>
+            <div class="filter-pills" role="radiogroup" aria-label="Filter Cases by Domain">
+              <button type="button" class="filter-pill active" data-filter="all" aria-checked="true">All Scenarios</button>
+              <button type="button" class="filter-pill" data-filter="FinTech" aria-checked="false">FinTech & Payments</button>
+              <button type="button" class="filter-pill" data-filter="Operations" aria-checked="false">Frontline & SLA</button>
+              <button type="button" class="filter-pill" data-filter="Self-Service" aria-checked="false">Self-Service & AI</button>
+            </div>
+          </div>
+
+          <div id="case-results-count" class="results-live-region" aria-live="polite"></div>
+
+          <!-- Case Study Grid -->
+          <div class="case-grid" id="case-studies-grid">
+            <!-- Populated dynamically via app.js -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Section: Community & Peer Connect -->
+      <section id="community" class="section community-section">
+        <div class="container">
+          <div class="community-card">
+            <div class="community-content">
+              <span class="section-tag">Peer Exchange</span>
+              <h2>No Slogans. Just Real Operational CX.</h2>
+              <p>
+                Interested in dissecting journey handoff drop-offs, setting up realistic VoE programs, or discussing CCXP scenarios? Connect directly for open, collegial discussions.
+              </p>
+              <div class="community-links">
+                <button type="button" class="btn btn-primary" id="open-connect-hero">Start a Peer Discussion</button>
+                <a href="#bio" class="btn btn-outline">Read Field Philosophy</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- VIEW 2: PRACTITIONER BIO & WORKING DIARY   -->
+    <!-- ========================================== -->
+    <div id="page-bio" class="page-view" hidden>
+      <section class="section bio-hero-section">
+        <div class="container bio-layout">
+          <!-- Left Column: Portrait / Profile Summary -->
+          <aside class="bio-sidebar">
+            <div class="profile-card">
+              <div class="profile-avatar-placeholder" aria-hidden="true">
+                <span>CX</span>
+              </div>
+              <h2 class="profile-name">CX Practitioner Diary</h2>
+              <p class="profile-role">Customer Experience Leader & Operations Architect</p>
+              
+              <div class="profile-meta">
+                <div class="meta-item">
+                  <span class="meta-label">Domain</span>
+                  <span class="meta-value">FinTech & Multi-Touchpoint Operations</span>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">Practice Focus</span>
+                  <span class="meta-value">Journey Mapping, VoC/VoE, SLA Governance</span>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">Location</span>
+                  <span class="meta-value">Ho Chi Minh City, Vietnam</span>
+                </div>
+              </div>
+
+              <div class="profile-contact-actions">
+                <button type="button" class="btn btn-primary btn-block" id="open-connect-bio">Get in Touch</button>
+                <button type="button" class="btn btn-outline btn-block" id="copy-email-btn">Copy Direct Email</button>
+                <div id="copy-toast" class="toast-message" role="status" aria-live="polite"></div>
+              </div>
+            </div>
+          </aside>
+
+          <!-- Right Column: Working Diary & Philosophy -->
+          <div class="bio-content-body">
+            <div class="content-block">
+              <span class="section-tag">Working Philosophy</span>
+              <h1>Grounded CX, Away from the Metric Traps</h1>
+              <p class="lead-text">
+                Customer Experience is often reduced to celebratory survey averages or boardroom presentation decks. In day-to-day operations, sustainable CX is quieter: fixing the unassigned ticket status, rewriting an impossible-to-understand error dialog, and granting frontline specialists the autonomy to solve real issues.
+              </p>
+            </div>
+
+            <div class="content-block">
+              <h3>Core Principles in Practice</h3>
+              <div class="principles-grid">
+                <div class="principle-card">
+                  <h4>1. Pair O-Data with X-Data</h4>
+                  <p>
+                    Survey scores without operational telemetry (outage logs, queue times, drop-off funnels) encourage vanity chasing. We measure customer sentiment only when anchored to direct system friction.
+                  </p>
+                </div>
+                <div class="principle-card">
+                  <h4>2. Protect Frontline Autonomy</h4>
+                  <p>
+                    The Service-Profit Chain is real: you cannot deliver an empathetic customer journey when your frontline is constrained by unworkable handle-time pressures and rigid approval chains.
+                  </p>
+                </div>
+                <div class="principle-card">
+                  <h4>3. The Outer Loop is the Only True Fix</h4>
+                  <p>
+                    Calling back an angry customer (Inner Loop) resolves an immediate relationship; eradicating the flawed policy or code bug that caused it (Outer Loop) is what prevents ten thousand more.
+                  </p>
+                </div>
+                <div class="principle-card">
+                  <h4>4. Clarify Every Handoff (RACI)</h4>
+                  <p>
+                    Customers experience a brand as a single organism, but organizations work in departmental silos. Cross-functional friction always hides at the handoff boundary between Product, Ops, and Tech.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="content-block">
+              <h3>Experience & Practical Focus</h3>
+              <div class="timeline">
+                <article class="timeline-item">
+                  <div class="timeline-marker"></div>
+                  <div class="timeline-content">
+                    <h4>Customer Experience Architecture & Journey Operations</h4>
+                    <span class="timeline-period">FinTech Sector (Mobile Wallet & Payments)</span>
+                    <p>
+                      Leading cross-functional journey redesigns, aligning product squads with frontline contact center triage, and building automated escalation workflows that prevent customer distress before ticket volumes spike.
+                    </p>
+                  </div>
+                </article>
+
+                <article class="timeline-item">
+                  <div class="timeline-marker"></div>
+                  <div class="timeline-content">
+                    <h4>Service Design & Decision Quality</h4>
+                    <span class="timeline-period">Framework Application</span>
+                    <p>
+                      Applying Stanford Decision Quality, Human-Centered Design, and CXPA core competencies to balance business viability with real-world usability and low-effort recovery paths.
+                    </p>
+                  </div>
+                </article>
+              </div>
+            </div>
+
+            <div class="content-block bio-footer-actions">
+              <a href="#maturity-audit" class="btn btn-secondary">Explore the Maturity Diagnostic</a>
+              <a href="#case-studies" class="btn btn-primary">Review Field Case Studies</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
   </main>
+
+  <!-- ========================================== -->
+  <!-- MODAL: CASE STUDY DEEP DIVE DIALOG         -->
+  <!-- ========================================== -->
+  <dialog id="case-modal" class="app-dialog" aria-labelledby="modal-case-title">
+    <div class="dialog-content">
+      <div class="dialog-header">
+        <div>
+          <span id="modal-case-category" class="badge badge-earth">Category</span>
+          <h3 id="modal-case-title" class="dialog-title">Case Study Details</h3>
+        </div>
+        <button type="button" class="btn-close" id="close-case-modal" aria-label="Close Case Study Details">&times;</button>
+      </div>
+
+      <div class="dialog-body">
+        <div class="modal-section">
+          <h4>The Operational Symptom</h4>
+          <p id="modal-case-problem"></p>
+        </div>
+
+        <div class="modal-section">
+          <h4>Root Cause Resolution Tree</h4>
+          <div class="resolution-tree" id="modal-case-tree">
+            <!-- Dynamic tree injected here -->
+          </div>
+        </div>
+
+        <div class="modal-section">
+          <h4>Pragmatic Trade-Offs & Frontline Impact</h4>
+          <p id="modal-case-tradeoffs"></p>
+        </div>
+
+        <div class="modal-section">
+          <h4>Observable Outcome</h4>
+          <div class="metric-pill-box" id="modal-case-metric"></div>
+        </div>
+      </div>
+
+      <div class="dialog-footer">
+        <button type="button" class="btn btn-secondary" id="modal-close-action">Close Teardown</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- ========================================== -->
+  <!-- MODAL: PEER CONNECT / ADVISORY DIALOG      -->
+  <!-- ========================================== -->
+  <dialog id="connect-modal" class="app-dialog" aria-labelledby="modal-connect-title">
+    <div class="dialog-content">
+      <div class="dialog-header">
+        <div>
+          <span class="badge badge-earth">Direct Dialogue</span>
+          <h3 id="modal-connect-title" class="dialog-title">Connect with a CX Practitioner</h3>
+        </div>
+        <button type="button" class="btn-close" id="close-connect-modal" aria-label="Close Connect Dialog">&times;</button>
+      </div>
+
+      <form id="connect-form" class="connect-form" novalidate>
+        <div class="dialog-body">
+          <p class="form-lead">
+            Whether you want to discuss your maturity score, compare operational escalation workflows, or share field learnings—drop a note.
+          </p>
+          
+          <div class="form-group">
+            <label for="connect-name">Your Name</label>
+            <input type="text" id="connect-name" name="name" required placeholder="e.g., Alex Tran">
+          </div>
+
+          <div class="form-group">
+            <label for="connect-email">Your Work or Personal Email</label>
+            <input type="email" id="connect-email" name="email" required placeholder="alex@company.com">
+          </div>
+
+          <div class="form-group">
+            <label for="connect-topic">Primary Topic of Interest</label>
+            <select id="connect-topic" name="topic" required>
+              <option value="" disabled selected>Select a topic...</option>
+              <option value="Maturity Audit Review">Maturity Audit Diagnostic Review</option>
+              <option value="Self-Service & Deflection">Self-Service & Deflection Design</option>
+              <option value="Escalation & SLA Overhaul">Escalation & SLA Matrix Design</option>
+              <option value="Frontline VoE Program">Frontline Voice of Employee (VoE)</option>
+              <option value="Casual Peer Coffee Chat">Informal Practitioner Coffee Chat</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="connect-message">Context or Operational Questions</label>
+            <textarea id="connect-message" name="message" rows="4" required placeholder="What operational challenges are you observing in your team right now?"></textarea>
+          </div>
+
+          <div id="connect-feedback" class="form-feedback" role="alert" hidden></div>
+        </div>
+
+        <div class="dialog-footer">
+          <button type="button" class="btn btn-outline" id="cancel-connect-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Send Note</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- Global Footer -->
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-left">
+        <span class="footer-title">CX Field Diary & Advisory Hub</span>
+        <p class="footer-note">Structured on CXPA core competencies, human-centered systems, and frontline empowerment.</p>
+      </div>
+      <div class="footer-right">
+        <ul class="footer-links">
+          <li><a href="#home">Diagnostic</a></li>
+          <li><a href="#case-studies">Cases</a></li>
+          <li><a href="#bio">Practitioner Bio</a></li>
+        </ul>
+        <span class="copyright">Open Practitioner Hub &bull; Grounded in Practice</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
 </body>
 </html>
